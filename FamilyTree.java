@@ -1,12 +1,16 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Scanner;
-
+import java.util.Set;
 
 // Program: Family Tree
 // Author: 	Jonathan Kelly
-// Date:	1 May 2017
+// Date:	26 April 2017
 // Purpose:	The purpose of this app is the development of a family tree
 //			using data structures and algorithms that would optimize run-time performance
 //			and ease-of-use through automation.
@@ -21,98 +25,94 @@ import java.util.Scanner;
  *			and children. 
  * 			
  * 			For adding family members, the undirected graph can link undirectly related family members.
- * 			For the algorithm, a List of Lists and an array may be used. An array with entries added and retrieved as a stack runs in O(1) time
- *			and that is all that is required of it. The List of Lists being a new ArrayList would run in O(n) time in the worst-case and
- *			O(1) in the best case.
+ * 			For this, we can find all nodes having a length of shortest path from one family member equal to 2.
+ *			The formal notation for the Graph is G = (V,E) with vertices V and edges E.
+ *			For the algorithm, we could use an ArrayList in Java for the Vertex List with one element per entry and an Edge List
+ *			with two edges for two edges from two vertices to one vertex representing a child and parents.
  */
 
 
 public class FamilyTree{
 		
 	public static void main(String[] args)  {
-	
-	
-		List<List<String>> setOfRelatives = new ArrayList<List<String>>();
 		
-		
-		Scanner input = new Scanner(System.in);
-		String name_entry;
-		String [] names = new String[0];
+		String[] name = new String[10000];
+		String [][] edge = new String[10000][10000];
+		int counter = 0;
+		int counter2 = 0;
+		Scanner scan = new Scanner(System.in);
+		String input;
 		/** Greet the user */
 			System.out.println("********************************Family tree********************************");
 			System.out.println("*                            By Jonathan Kelly                            *");
 			System.out.println("***************************************************************************");
 			System.out.println("Enter 'z' at any time to exit program.");
 			
-		do
+			System.out.println("Hello. Please enter a family member name: ");
+	
+		do 
 		{
+			System.out.println("Please enter a family member name for a set of relationships: ");
+			input = scan.nextLine();
+			name[counter] = input;
 		
-			System.out.println("Please enter a family member name: ");
-			name_entry = input.next();
-			List<String> list = new ArrayList<>();
-			if("z".equals(name_entry))
+			if(input.equals("z"))
 			{
 				System.exit(0);
 			}
-			else if("q".equals(name_entry))
+			if(input.equals("r"))
 			{
 				break;
 			}
-			else
-			{
-				names = addElement(names, name_entry);
-				list.add(name_entry);
-				System.out.println("About " + name_entry + ", please enter a set of relationships for this family member.");
-			}
-			
-			
-			/** Loop through and find relationships for each family member */
-			
-			
-			
-			System.out.println("The family relationships are as follows: ");
-			while(!"z".equals(name_entry) || !"q".equals(name_entry))
-			{   
-				System.out.println("Related to " + names[names.length - 1] + " (press 'q' to exit sequence or 'z' to exit program): ");
-				name_entry = input.next();
-				if (list.contains(name_entry))
+			// resize the array
+			System.out.println("Enter 'q' to move to the next set of relationships then 'r' to display family tree.");
+				// request information
+				System.out.println("Who is " + name[counter] + " related to? ");
+				System.out.println("Enter a relative of " + name[counter] + "'s: ");
+				name[counter + 1] = scan.nextLine();
+				
+				
+					// loop through for family member data
+				while(!input.equals("q"))
 				{
-					break;
+					counter2 = 0;
+					// get the info
+					System.out.println("Who else is related to " + name[counter] + "?");
+					System.out.println("Enter the name of " + name[counter] + "'s relative: ");
+					System.out.println("Thank you. ");
+				
+					// 	entry for a column  
+					input = scan.nextLine();
+					edge[counter][counter2] = input;
+					if(input.equals("q"))
+						{
+							break;
+							
+						}
+					else if(input.equals("z"))
+					{
+						System.exit(0);
+					}
+						counter2++;				
 				}
-				else if("z".equals(name_entry))
-				{
-					System.exit(0);
-				}
-				else if("q".equals(name_entry))
-				{
-					break;
-				}
-				else
-				{
-					//  put the set of relative names array in list
-					list.add(name_entry);
-				}
-			}
-			setOfRelatives.add(list);
+				// 	iterate to new column
+				counter++;
 			
-		}while(!"q".equals(name_entry) || !"z".equals(name_entry));
-	
+				
+		} while (!input.equals("r") || !input.equals("z"));
+			
+		/** Loop through and find relationships for each family member */
+		
 		
 		/** Display the relationships */
-		
-		System.out.println("The relationships between family members are as follows: ");
-		for (List<String> relatives: setOfRelatives)
-		{
-			System.out.println(relatives);
+		System.out.println("The family relationships are as follows: ");	
+		for(int i = 0; i < edge[0].length; i++) {
+			for(int j = 0; j < edge.length; j++) {
+				if(edge[j][i] != null)
+				System.out.printf("%s ", edge[j][i] + "\t");
+			}
+			System.out.println();
 		}
-		
-		// Print the relationships by column
-		
-	}
-
-	static String[] addElement(String[] a, String e){
-		a = Arrays.copyOf(a, a.length + 1);
-		a[a.length - 1] = e;
-		return a;
+		System.out.println("Thank you for using Family tree. Have a good day. ");
 	}
 }
